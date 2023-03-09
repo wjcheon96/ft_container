@@ -6,6 +6,7 @@
 
 #include "random_access_iterator.hpp"
 #include "reverse_iterator.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -17,10 +18,10 @@ namespace ft
             typedef typename allocator_type::const_reference                    const_reference;
             typedef typename allocator_type::pointer                            pointer;
             typedef typename allocator_type::const_pointer                      const_pointer;
-            typedef typename random_access_iterator<Iterator, Container>        iterator;
-            typedef typename random_access_iterator<const Iterator, Container>  const_iterator;
-            typedef typename reverse_iterator<Iterator>                         reverse_iterator;
-            typedef typename reverse_iterator<const_iterator>                   const_reverse_iterator; 
+            typedef typename ft::random_access_iterator<value_type*>                   iterator;
+            typedef typename ft::random_access_iterator<const value_type*>             const_iterator;
+            typedef typename ft::reverse_iterator<iterator>                         reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>                   const_reverse_iterator; 
             typedef typename allocator_type::difference_type                    difference_type;
             typedef typename allocator_type::size_type                          size_type;
             explicit vector (const allocator_type& alloc = allocator_type()) {
@@ -35,16 +36,17 @@ namespace ft
                     push_back(val);
                 }
             }
-            template <class InputIterator>
+            template <class InputIterator, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL>
             vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) 
             : _alloc(alloc), _begin(NULL), _end(NULL), _capacity(NULL) {
                 while (first != last) {
-                    push_back(first++);
+                    push_back(*first);
+                    first++;
                 }
-                push_back(first);
+                push_back(*first);
             }
             vector (const vector& x) 
-            : _alloc(x.alloc), _begin(x._begin), _end(x._end), _capacity(x._capacity) {};
+            : _alloc(x._alloc), _begin(x._begin), _end(x._end), _capacity(x._capacity) {}
             size_type size() const {
                 return (_end - _begin);
             }
@@ -53,9 +55,8 @@ namespace ft
                 _alloc.deallocate(_begin, size());
             }
             vector& operator=(const vector& x) {
-                if (this == x)
-                    return *this;
-                assign(x._begin, x._end);
+                assign(x.begin(), x.end());
+                return (*this);
             }
             iterator begin() {
                 return (_begin);
@@ -86,7 +87,7 @@ namespace ft
             }
             void resize (size_type n, value_type val = value_type()) {
                 if (n > size()) {
-                    if (n > _capacity)
+                    if (n > capacity())
 						reserve(n);
 					for (size_type i = size(); i < n; i++) {
 						_alloc.construct(_end, val);
@@ -101,7 +102,7 @@ namespace ft
 				}
             }
             size_type capacity() const {
-                return (_capacity);
+                return (_capacity - _begin);
             }
             bool empty() const {
                 return (_end == _begin);
@@ -112,7 +113,7 @@ namespace ft
                     tmp = _alloc.allocate(n);
                     size_type _size = size();
                     for (int i = 0; i < _size; i++) {    
-                        tmp[i] = _alloc.construct(_begin[i]);
+                        _alloc.construct(&tmp[i], _begin[i]);
                     }
                     clear();
                     _alloc.deallocate(_begin, _size);
@@ -154,9 +155,10 @@ namespace ft
                 clear();
                 _alloc.deallocate(_begin, size());
                 while (first != last) {
-                    push_back(first++);
+                    push_back(*first);
+                    first++;
                 }
-                push_back(first);
+                push_back(*first);
             }
             void assign (size_type n, const value_type& val) {
                 clear();
@@ -168,9 +170,9 @@ namespace ft
             void push_back(const value_type& val) {
                 if (size() == 0)
                     reserve(1);
-                if (size() == _capacity)
+                if (size() == capacity())
                     reserve(size() * 2);
-                _end = _alloc.construct(val);
+                _alloc.construct(_end, val);
                 _end++;
             }
             void pop_back() {
@@ -274,7 +276,7 @@ namespace ft
     operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
         if (lhs.size() != rhs.size())
             return (false);
-        for (size_type i = 0; i < lhs.size(); i++) {
+        for (size_t i = 0; i < lhs.size(); i++) {
             if (lhs[i] != rhs[i])
                 return (false);
         }
@@ -288,26 +290,26 @@ namespace ft
     template <class T, class Alloc>
     inline bool
     operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template <class T, class Alloc>
     inline bool
     operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+        return (!(rhs < lhs));
     }
     template <class T, class Alloc>
     inline bool
     operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+        return (rhs < lhs);
     }
     template <class T, class Alloc>
     inline bool
     operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-
+        return (!(lhs < rhs));
     }
     template <class T, class Alloc>
     void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
-
+        x.swap(y);
     }
 }
 #endif
