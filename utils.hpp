@@ -2,6 +2,10 @@
 #define UTILS_HPP
 
 namespace ft {
+    template <class T>
+    struct less : binary_function <T,T,bool> {
+    bool operator() (const T& x, const T& y) const {return x<y;}
+    };
     template<bool Cond, class T = void> struct enable_if {};
     template<class T> struct enable_if<true, T> {
         typedef T type;
@@ -71,9 +75,6 @@ namespace ft {
     struct is_integral<long long> : public true_integral {};
     template<>
     struct is_integral<unsigned long long> : public true_integral {};
-
-
-
 }
 
 #endif

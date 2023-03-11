@@ -16,6 +16,5 @@ int main(void)
 	mapOperator();
 	iterOper();
 
-	system("leaks test");
 	return (0);
 }

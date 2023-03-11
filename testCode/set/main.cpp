@@ -16,6 +16,5 @@ int main(void)
 	setOperator();
 	iterOper();
 
-	system("leaks test");
 	return (0);
 }
