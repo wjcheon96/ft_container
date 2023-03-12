@@ -13,6 +13,7 @@ namespace ft {
 			typedef ft::RBtree_node<T>		Node;
 			typedef ft::RBtree_node<T>*		NodePtr;
 			NodePtr							_node;
+			NodePtr							_nil;
 		public:
 			typedef	bidirectional_iterator_tag		iterator_category;
 			typedef	T								value_type;
@@ -20,24 +21,25 @@ namespace ft {
 			typedef	T&								reference;
 			typedef	std::ptrdiff_t					difference_type;
 
-			RBtree_iterator() : _node(NULL) {}
-			RBtree_iterator(const RBtree_iterator &other) : _node(other._node) {}
-			RBtree_iterator(NodePtr node) : _node(node) {}
+			RBtree_iterator() : _node(NULL), _nil(NULL) {}
+			RBtree_iterator(const RBtree_iterator &other) : _node(other._node), _nil(other._nil) {}
+			RBtree_iterator(NodePtr node) : _node(node), _nil(NULL) {}
 			~RBtree_iterator() {}
 			RBtree_iterator &operator=(const RBtree_iterator &obj) {
 				_node = obj._node;
+				_node = obj._nil;
 				return *this;
 			}
 			NodePtr	 base() const { return (_node); }
 
 			RBtree_iterator& operator++() {
-				if (_node->_right != NULL) {
+				if (_node->_right != _nil) {
 					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->_parent != NULL && _node != _node->_parent->_left)
+				while (_node->_parent != _nil && _node != _node->_parent->_left)
 					_node = _node->_parent;
-				if (_node->_parent != NULL)
+				if (_node->_parent != _nil)
 					_node = _node->_parent;
 				return (*this);
 			}
@@ -48,16 +50,16 @@ namespace ft {
 			}
 
 			RBtree_iterator& operator--() {
-				if (_node->_left != NULL) {
+				if (_node->_left != _nil) {
 					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->_parent != NULL && _node != _node->_parent->_right)
+				while (_node->_parent != _nil && _node != _node->_parent->_right)
 					_node = _node->_parent;
-				if (_node->_parent != NULL)
+				if (_node->_parent != _nil)
 					_node = _node->_parent;
 				else 
-					_node = NULL;
+					_node = _nil;
 				return (*this);
 			}
 
@@ -76,13 +78,13 @@ namespace ft {
 			
 			private:
 				NodePtr min_value_node(NodePtr node) {
-					if (node->_left == NULL)
+					if (node->_left == _nil)
 						return (node);
 					return (min_value_node(node->_left));
 				}
 
 				NodePtr max_value_node(NodePtr node) {
-					if (node->_right == NULL)
+					if (node->_right == _nil)
 						return (node);
 					return (max_value_node(node->_right));
 				}
@@ -93,6 +95,7 @@ namespace ft {
 			typedef ft::RBtree_node<T>		Node;
 			typedef ft::RBtree_node<T>*		NodePtr;
 			NodePtr							_node;
+			NodePtr							_nil;
 		public:
 			typedef	bidirectional_iterator_tag		iterator_category;
 			typedef	T								value_type;
@@ -100,25 +103,26 @@ namespace ft {
 			typedef	const T&						reference;
 			typedef	std::ptrdiff_t					difference_type;
 
-			RBtree_const_iterator() : _node(NULL) {}
-			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node) {}
+			RBtree_const_iterator() : _node(NULL), _nil(NULL) {}
+			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node), _nil(other._nil) {}
 			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()) {}
-			RBtree_const_iterator(NodePtr node) : _node(node) {}
+			RBtree_const_iterator(NodePtr node) : _node(node), _nil(NULL) {}
 			virtual ~RBtree_const_iterator() {}
 			RBtree_const_iterator &operator=(const RBtree_const_iterator &obj) {
 				_node = obj._node;
+				_nil = obj._nil;
 				return *this;
 			}
 			NodePtr	 base() const { return (_node); }
 
 			RBtree_const_iterator& operator++() {
-				if (_node->_right != NULL) {
+				if (_node->_right != _nil) {
 					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->_parent != NULL && _node != _node->_parent->_left)
+				while (_node->_parent != _nil && _node != _node->_parent->_left)
 					_node = _node->_parent;
-				if (_node->_parent != NULL)
+				if (_node->_parent != _nil)
 					_node = _node->_parent;
 				return (*this);
 			}
@@ -129,16 +133,16 @@ namespace ft {
 			}
 
 			RBtree_const_iterator& operator--() {
-				if (_node->_left != NULL) {
+				if (_node->_left != _nil) {
 					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->_parent != NULL && _node != _node->_parent->_right)
+				while (_node->_parent != _nil && _node != _node->_parent->_right)
 					_node = _node->_parent;
-				if (_node->_parent != NULL)
+				if (_node->_parent != _nil)
 					_node = _node->_parent;
 				else 
-					_node = NULL;
+					_node = _nil;
 				return (*this);
 			}
 
@@ -157,13 +161,13 @@ namespace ft {
 			
 			private:
 				NodePtr min_value_node(NodePtr node) {
-					if (node->_left == NULL)
+					if (node->_left == _nil)
 						return (node);
 					return (min_value_node(node->_left));
 				}
 
 				NodePtr max_value_node(NodePtr node) {
-					if (node->_right == NULL)
+					if (node->_right == _nil)
 						return (node);
 					return (max_value_node(node->_right));
 				}

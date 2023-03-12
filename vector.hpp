@@ -219,7 +219,7 @@ namespace ft
                 if (size() + n > capacity() * 2)
                     reserve(size() + n);
                 else if (size() + n > capacity())
-                    reserve(size() * 2);
+                    reserve(capacity() * 2);
                 for (size_type i = size(); i > pos; i--) {
                     _begin[i + n - 1] = _begin[i - 1];
                 }
@@ -234,8 +234,8 @@ namespace ft
 				size_type pos = position - begin();
                 if (size() + n > capacity() * 2)
                     reserve(size() + n);
-				if (size() + n > capacity())
-					reserve(size() * 2);
+				else if (size() + n > capacity())
+					reserve(capacity() * 2);
 				for (size_type i = size(); i > pos; i--) {
 					_begin[i + n - 1] = _begin[i - 1];
 				}

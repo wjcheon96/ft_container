@@ -70,8 +70,8 @@ namespace ft {
             virtual ~RBtree() {
 				clear();
 			}
-			iterator				begin() { return iterator(rbtree_min()); }
-			const_iterator			begin() const { return const_iterator(rbtree_min()); }
+			iterator				begin() { return iterator(rbtree_min(_root)); }
+			const_iterator			begin() const { return const_iterator(rbtree_min(_root)); }
 			iterator				end() { return iterator(_nil); }
 			const_iterator			end() const { return const_iterator(_nil); }
 			reverse_iterator		rbegin() { return reverse_iterator(end()); }
@@ -274,19 +274,23 @@ namespace ft {
                 }
                 return (iterator(_root));
             }
-            NodePtr rbtree_min() const {
-                NodePtr cur = _root;
-                while (cur->_left != _nil) {
-                    cur = cur->_left;
+            NodePtr rbtree_min(NodePtr node) const {
+                if (node == NULL) {
+                    return node;
                 }
-                return cur;
+                while (node->_left != _nil) {
+                    node = node->_left;
+                }
+                return node;
             }
-            NodePtr rbtree_max() const {
-                NodePtr cur = _root;
-                while (cur -> _right != _nil) {
-                    cur = cur->_right;
+            NodePtr rbtree_max(NodePtr node) const {
+                if (node == NULL) {
+                    return node;
                 }
-                return cur;
+                while (node -> _right != _nil) {
+                    node = node->_right;
+                }
+                return node;
             }
             void clear() {
                 delete_tree(_root);
