@@ -2,6 +2,7 @@
 #define RBTREE_HPP
 
 #include <memory>
+#include <iostream>
 #include "pair.hpp"
 #include "utils.hpp"
 #include "RBtree_iterator_traits.hpp"
@@ -11,8 +12,8 @@
 #include "utils.hpp"
 
 namespace ft {
-    template<typename T, typename Compare, typename Alloc = std::allocator<T> > 
-    class RBTree {
+    template<typename T, typename Compare = ft::less<T>, typename Alloc = std::allocator<T> > 
+    class RBtree {
         private:
 			typedef ft::RBtree_node<T>									node_type;
 			typedef ft::RBtree_node<T>* 								NodePtr;
@@ -39,21 +40,38 @@ namespace ft {
             NodePtr        	_nil;
 			size_type		_size;
         public:
-            RBTree(value_compare const& comp, allocator_type const& alloc, node_alloc_type const& node_alloc = node_alloc_type())
+            RBtree(value_compare const& comp, allocator_type const& alloc, node_alloc_type const& node_alloc = node_alloc_type())
             : _comp(comp), _alloc(alloc), _node_alloc(node_alloc), _root(NULL), _nil(NULL), _size(0) {
                 _nil = _node_alloc.allocate(1);
                 _node_alloc.construct(_nil, node_type());
                 _root = _nil;
 				_nil->_color = BLACK;
             }
-            RBTree(const RBTree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _size(0) {
+            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _size(0) {
                 _nil = _node_alloc.allocate(1);
 				_node_alloc.construct(_nil, node_type());
                 _root = _nil;
 				_nil->_color = BLACK;
 			}
-			iterator				begin() { return iterator(rbtree_min(_root)); }
-			const_iterator			begin() const { return const_iterator(rbtree_min(_root)); }
+            RBtree& operator=(const RBtree& x) {
+				if (this == &x) {
+					return *this;
+				}
+				clear();
+				_comp = x._comp;
+				_alloc = x._alloc;
+				_node_alloc = x._node_alloc;
+				if(x._root != NULL){
+					copy(x._root);
+				}
+				_size = x._size;
+				return *this;
+			}
+            virtual ~RBtree() {
+				clear();
+			}
+			iterator				begin() { return iterator(rbtree_min()); }
+			const_iterator			begin() const { return const_iterator(rbtree_min()); }
 			iterator				end() { return iterator(_nil); }
 			const_iterator			end() const { return const_iterator(_nil); }
 			reverse_iterator		rbegin() { return reverse_iterator(end()); }
@@ -61,6 +79,13 @@ namespace ft {
 			reverse_iterator		rend() { return reverse_iterator(begin()); }
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
         private:
+            void copy(NodePtr node){
+				if (node == _nil)
+					return;
+				insert_value(node->_value);
+				copy(node->_left);
+				copy(node->_right);
+			}
             void    right_rotate(NodePtr node) {
                 NodePtr left_child = node->_left;
 
@@ -158,10 +183,10 @@ namespace ft {
             }
 
             bool    insert_fixup(NodePtr z) {
-                while (node->_parent->_color == RED) {
-                    if (node->_parent == node->_parent->_parent->_left) {
+                while (z->_parent->_color == RED) {
+                    if (z->_parent == z->_parent->_parent->_left) {
                         NodePtr y = z->_parent->_parent->_right;
-                        if (y->_color = RED) {
+                        if (y->_color == RED) {
                             z->_parent->_color = BLACK;
                             y->_color = BLACK;
                             z->_parent->_parent->_color = RED;
@@ -173,13 +198,13 @@ namespace ft {
                                 left_rotate(z);
                             }
                             z->_parent->_color = BLACK;
-                            z->_parent->_parent->_color = RED:
+                            z->_parent->_parent->_color = RED;
                             right_rotate(z->_parent->_parent);
                         }
                     }
                     else {
                         NodePtr y = z->_parent->_parent->_left;
-                        if (y->_color = RED) {
+                        if (y->_color == RED) {
                             z->_parent->_color = BLACK;
                             y->_color = BLACK;
                             z->_parent->_parent->_color = RED;
@@ -196,7 +221,7 @@ namespace ft {
                         }
                     }
                 }
-                t->root->_color = BLACK;
+                _root->_color = BLACK;
                 return (true);
             }
 
@@ -219,42 +244,42 @@ namespace ft {
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
                 NodePtr node = _root;
-                while (node != _nil && node->_val != val) {
-                    if (_comp(node->val, val)) {
+                while (node != _nil && node->_value != val) {
+                    if (_comp(node->_value, val)) {
                         node = node->_right; 
                     }
-                    else (_comp(node->val, val)) {
+                    else if (_comp(node->_value, val)) {
                         node = node->_left;
                     }
                 }
-                if (node->val == val && node != _nil) {
+                if (node->_value == val && node != _nil) {
                     return (node);
                 }
                 return (NULL);
             }
-            iterator find(const value_type& val) {
+            iterator find(const value_type& val) const {
                 NodePtr node = _root;
-                while (node != _nil && node->_val != val) {
-                    if (_comp(node->val, val)) {
+                while (node != _nil && node->_value != val) {
+                    if (_comp(node->_value, val)) {
                         node = node->_right; 
                     }
-                    else (_comp(node->val, val)) {
+                    else if (_comp(node->_value, val)) {
                         node = node->_left;
                     }
                 }
-                if (node->val == val && node != _nil) {
+                if (node->_value == val && node != _nil) {
                     return (iterator(node));
                 }
                 return (iterator(_root));
             }
-            NodePtr rbtree_min() {
+            NodePtr rbtree_min() const {
                 NodePtr cur = _root;
                 while (cur->_left != _nil) {
                     cur = cur->_left;
                 }
                 return cur;
             }
-            NodePtr rbtree_max() {
+            NodePtr rbtree_max() const {
                 NodePtr cur = _root;
                 while (cur -> _right != _nil) {
                     cur = cur->_right;
@@ -268,7 +293,7 @@ namespace ft {
             }
 
 //---------------------------erase-------------------------------------------
-            void    transplate(NodePtr u, NodePtr v) {
+            void    transplant(NodePtr u, NodePtr v) {
                 if (u->_parent == _nil) {
                     _root = v;
                 }
@@ -299,7 +324,7 @@ namespace ft {
                 _size--;
                 if (z->_left == _nil) {
                     x = z->_right;
-                    transplant(z, z->_right)
+                    transplant(z, z->_right);
                 }
                 else if (z->_right == _nil) {
                     x= z->_left;
@@ -317,7 +342,7 @@ namespace ft {
                         y->_right = z->_right;
                         y->_right->_parent = y;
                     }
-                    rb_transplant(z, y);
+                    transplant(z, y);
                     y->_left = z->_left;
                     y->_left->_parent = y;
                     y->_color = z->_color;
@@ -330,10 +355,10 @@ namespace ft {
                 return (1);
             }
             void    delete_fixup(NodePtr x) {
-                while (x != _root && x->_color = BLACK) {
+                while (x != _root && x->_color == BLACK) {
                     if (x == x->_parent->_left) {
                         NodePtr w = x->_parent->_right;
-                        if (w->_color = RED) {
+                        if (w->_color == RED) {
                             w->_color = BLACK;
                             x->_parent->_color = RED;
                             left_rotate(x->_parent);
@@ -365,12 +390,12 @@ namespace ft {
                             right_rotate(x->_parent);
                             w = x->_parent->_left;
                         }
-                        if (w->_right->_color == BLACk && w->_left->_color == BLACK) {
+                        if (w->_right->_color == BLACK && w->_left->_color == BLACK) {
                             w->_color = RED;
                             x = x->_parent;
                         }
                         else {
-                            if (w->_left->_color = BLACK) {
+                            if (w->_left->_color == BLACK) {
                                 w->_right->_color = BLACK;
                                 w->_color = RED;
                                 left_rotate(w);
@@ -412,7 +437,7 @@ namespace ft {
 				}
 				return count;
 			}
-            void swap(red_black_tree& obj) {
+            void swap(RBtree& obj) {
 				if (this == &obj) {
 					return;
 				}
@@ -433,8 +458,8 @@ namespace ft {
 				_comp = tmp_comp;
 				_alloc = tmp_alloc;
 				_node_alloc = tmp_node_alloc;
-				_root = _root;
-				_nil = _nil;
+				_root = tmp_root;
+				_nil = tmp_nil;
 				_size = tmp_size;
 			}
     };
