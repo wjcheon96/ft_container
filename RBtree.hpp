@@ -90,7 +90,7 @@ namespace ft {
                 NodePtr left_child = node->_left;
 
                 node->_left = left_child->_right;
-                if (left_child != _nil) {
+                if (left_child->_right != _nil) {
                     left_child->_right->_parent = node;
                 }
                 left_child->_parent = node->_parent;
@@ -110,7 +110,7 @@ namespace ft {
                 NodePtr right_child = node->_right;
                 node->_right = right_child->_left;
 
-                if (right_child != _nil) {
+                if (right_child->_left != _nil) {
                     right_child->_left->_parent = node;
                 }
                 right_child->_parent = node->_parent;
@@ -123,6 +123,8 @@ namespace ft {
                 else {
                     node->_parent->_right = right_child;
                 }
+                right_child->_left = node;
+                node->_parent = right_child;
             }
             void    delete_tree(NodePtr node) {
                 if (node != _nil) {
