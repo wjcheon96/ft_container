@@ -27,7 +27,7 @@ void construct()
 	// ------------------- [0] ----------------------------------
 	printCount(0);
 	std::map<int, std::string> std_m(std_lst.begin(), std_lst.end());
-	ft::map<int, std::string> ft_m(ft_lst.begin(), ft_lst.end());
+	ft::map<int, std::string> ft_m(ft_lst.begin(), ft_lst.begin());
 	print(ft_m, std_m);
 
 	// ------------------- [1] ----------------------------------
