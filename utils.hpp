@@ -1,11 +1,22 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include "pair.hpp"
+
 namespace ft {
-    template <class T>
-    struct less : binary_function <T,T,bool> {
-    bool operator() (const T& x, const T& y) const {return x<y;}
-    };
+    template <class T1, class T2, class Result>
+	struct binary_function {
+		typedef T1      first_type;
+		typedef T2      second_type;
+		typedef Result  result;
+	};
+
+	template <class T>
+	struct less : public binary_function<T1, T2, bool> {
+		bool operator()(const T& x, const T& y) const {
+			return (x < y);
+		}
+	};
     template<bool Cond, class T = void> struct enable_if {};
     template<class T> struct enable_if<true, T> {
         typedef T type;
