@@ -24,11 +24,11 @@ namespace ft {
             _parent = obj._parent;
             return (*this);
         }
-        bool operator==(const RedBlackTreeNode &other) const {
-			return value == other.value;
+        bool operator==(const RBtree_node &other) const {
+			return _value == other._value;
 		}
-		bool operator!=(const RedBlackTreeNode &other) const {
-			return value != other.value;
+		bool operator!=(const RBtree_node &other) const {
+			return _value != other._value;
 		}
     };
 	template <class T1, class T2>

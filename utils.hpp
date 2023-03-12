@@ -2,6 +2,7 @@
 #define UTILS_HPP
 
 #include "pair.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft {
     template <class T1, class T2, class Result>
@@ -12,7 +13,7 @@ namespace ft {
 	};
 
 	template <class T>
-	struct less : public binary_function<T1, T2, bool> {
+	struct less : public binary_function<T, T, bool> {
 		bool operator()(const T& x, const T& y) const {
 			return (x < y);
 		}

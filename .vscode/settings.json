@@ -69,6 +69,7 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "numeric": "cpp"
     }
 }

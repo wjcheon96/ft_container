@@ -1,7 +1,7 @@
 #ifndef RBTREE_ITERATOR_TRAITS
 #define RBTREE_ITERATOR_TRAITS
 
-#include "RBtree_node.hpp";
+#include "RBtree_node.hpp"
 
 namespace ft {
     template <typename T>
@@ -9,7 +9,7 @@ namespace ft {
         private:
 			typedef ft::RBtree_node<T>		Node;
 			typedef ft::RBtree_node<T>*		NodePtr;
-			typedef NodePtr				_node;
+			typedef NodePtr					_node;
 		public:
 			typedef	bidirectional_iterator_tag		iterator_category;
 			typedef	T								value_type;
