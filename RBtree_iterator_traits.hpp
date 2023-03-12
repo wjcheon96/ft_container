@@ -4,12 +4,15 @@
 #include "RBtree_node.hpp"
 
 namespace ft {
+	template <typename T>
+	class RBtree_const_iterator; 
+
     template <typename T>
 	class RBtree_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         private:
 			typedef ft::RBtree_node<T>		Node;
 			typedef ft::RBtree_node<T>*		NodePtr;
-			typedef NodePtr					_node;
+			NodePtr							_node;
 		public:
 			typedef	bidirectional_iterator_tag		iterator_category;
 			typedef	T								value_type;
@@ -89,7 +92,7 @@ namespace ft {
         private:
 			typedef ft::RBtree_node<T>		Node;
 			typedef ft::RBtree_node<T>*		NodePtr;
-			typedef NodePtr					_node;
+			NodePtr							_node;
 		public:
 			typedef	bidirectional_iterator_tag		iterator_category;
 			typedef	T								value_type;
@@ -101,7 +104,7 @@ namespace ft {
 			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node) {}
 			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()) {}
 			RBtree_const_iterator(NodePtr node) : _node(node) {}
-			virtual ~RBtree_iterator() {}
+			virtual ~RBtree_const_iterator() {}
 			RBtree_const_iterator &operator=(const RBtree_const_iterator &obj) {
 				_node = obj._node;
 				return *this;
