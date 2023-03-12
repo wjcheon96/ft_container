@@ -28,14 +28,14 @@ namespace ft {
 			NodePtr	 base() const { return (_node); }
 
 			RBtree_iterator& operator++() {
-				if (_node->right != NULL) {
-					_node = min_value_node(_node->right);
+				if (_node->_right != NULL) {
+					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->parent != NULL && _node != _node->parent->left)
-					_node = _node->parent;
-				if (_node->parent != NULL)
-					_node = _node->parent;
+				while (_node->_parent != NULL && _node != _node->_parent->_left)
+					_node = _node->_parent;
+				if (_node->_parent != NULL)
+					_node = _node->_parent;
 				return (*this);
 			}
 			RBtree_iterator operator++(int) {
@@ -45,14 +45,14 @@ namespace ft {
 			}
 
 			RBtree_iterator& operator--() {
-				if (_node->left != NULL) {
-					_node = max_value_node(_node->left);
+				if (_node->_left != NULL) {
+					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->parent != NULL && _node != _node->parent->right)
-					_node = _node->parent;
-				if (_node->parent != NULL)
-					_node = _node->parent;
+				while (_node->_parent != NULL && _node != _node->_parent->_right)
+					_node = _node->_parent;
+				if (_node->_parent != NULL)
+					_node = _node->_parent;
 				else 
 					_node = NULL;
 				return (*this);
@@ -64,8 +64,8 @@ namespace ft {
 				return (tmp);
 			}
 
-			reference operator*() const {return (_node->value);}
-			pointer operator->() const { return (&(_node->value)); }
+			reference operator*() const {return (_node->_value);}
+			pointer operator->() const { return (&(_node->_value)); }
 			bool operator==(const RBtree_iterator& obj) const { return (_node == obj.base()); }
 			bool operator!=(const RBtree_iterator& obj) const { return (_node != obj.base()); }
 			bool operator==(const RBtree_const_iterator<T>& obj) const { return (_node == obj.base()); }
@@ -73,15 +73,15 @@ namespace ft {
 			
 			private:
 				NodePtr min_value_node(NodePtr node) {
-					if (node->left == NULL)
+					if (node->_left == NULL)
 						return (node);
-					return (min_value_node(node->left));
+					return (min_value_node(node->_left));
 				}
 
 				NodePtr max_value_node(NodePtr node) {
-					if (node->right == NULL)
+					if (node->_right == NULL)
 						return (node);
-					return (max_value_node(node->right));
+					return (max_value_node(node->_right));
 				}
 	};
 	template <typename T>
@@ -109,14 +109,14 @@ namespace ft {
 			NodePtr	 base() const { return (_node); }
 
 			RBtree_const_iterator& operator++() {
-				if (_node->right != NULL) {
-					_node = min_value_node(_node->right);
+				if (_node->_right != NULL) {
+					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->parent != NULL && _node != _node->parent->left)
-					_node = _node->parent;
-				if (_node->parent != NULL)
-					_node = _node->parent;
+				while (_node->_parent != NULL && _node != _node->_parent->_left)
+					_node = _node->_parent;
+				if (_node->_parent != NULL)
+					_node = _node->_parent;
 				return (*this);
 			}
 			RBtree_const_iterator operator++(int) {
@@ -126,14 +126,14 @@ namespace ft {
 			}
 
 			RBtree_const_iterator& operator--() {
-				if (_node->left != NULL) {
-					_node = max_value_node(_node->left);
+				if (_node->_left != NULL) {
+					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->parent != NULL && _node != _node->parent->right)
-					_node = _node->parent;
-				if (_node->parent != NULL)
-					_node = _node->parent;
+				while (_node->_parent != NULL && _node != _node->_parent->_right)
+					_node = _node->_parent;
+				if (_node->_parent != NULL)
+					_node = _node->_parent;
 				else 
 					_node = NULL;
 				return (*this);
@@ -145,8 +145,8 @@ namespace ft {
 				return (tmp);
 			}
 
-			reference operator*() const {return (_node->value);}
-			pointer operator->() const { return (&(_node->value)); }
+			reference operator*() const {return (_node->_value);}
+			pointer operator->() const { return (&(_node->_value)); }
 			bool operator==(const RBtree_const_iterator& obj) const { return (_node == obj.base()); }
 			bool operator!=(const RBtree_const_iterator& obj) const { return (_node != obj.base()); }
 			bool operator==(const RBtree_iterator<T>& obj) const { return (_node == obj.base()); }
@@ -154,15 +154,15 @@ namespace ft {
 			
 			private:
 				NodePtr min_value_node(NodePtr node) {
-					if (node->left == NULL)
+					if (node->_left == NULL)
 						return (node);
-					return (min_value_node(node->left));
+					return (min_value_node(node->_left));
 				}
 
 				NodePtr max_value_node(NodePtr node) {
-					if (node->right == NULL)
+					if (node->_right == NULL)
 						return (node);
-					return (max_value_node(node->right));
+					return (max_value_node(node->_right));
 				}
 	};
 }
