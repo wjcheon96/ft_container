@@ -2,6 +2,7 @@
 #define RBTREE_ITERATOR_TRAITS
 
 #include "RBtree_node.hpp"
+#include <iostream>
 
 namespace ft {
 	template <typename T>
@@ -31,6 +32,8 @@ namespace ft {
 				return *this;
 			}
 			NodePtr	 base() const { return (_node); }
+
+			NodePtr  get_nil() const { return (_nil); }
 
 			RBtree_iterator& operator++() {
 				if (_node->_right != _nil) {
@@ -89,6 +92,7 @@ namespace ft {
 					return (max_value_node(node->_right));
 				}
 	};
+	
 	template <typename T>
 	class RBtree_const_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> {
         private:
@@ -105,7 +109,7 @@ namespace ft {
 
 			RBtree_const_iterator() : _node(NULL), _nil(NULL) {}
 			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node), _nil(other._nil) {}
-			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()) {}
+			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()), _nil(other.get_nil()) {}
 			RBtree_const_iterator(NodePtr node, NodePtr nil) : _node(node), _nil(nil) {}
 			virtual ~RBtree_const_iterator() {}
 			RBtree_const_iterator &operator=(const RBtree_const_iterator &obj) {
@@ -172,6 +176,7 @@ namespace ft {
 					return (max_value_node(node->_right));
 				}
 	};
+	
 }
 
 #endif

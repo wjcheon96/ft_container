@@ -242,15 +242,16 @@ namespace ft {
 				for (InputIterator it = first; it != last; ++it) {
 					insert(*it);
 				}
-                print(this->_root);
+                //print();
 			}
 
-            void print(NodePtr n) {
-                if (n == _nil)
-                    return ;
-                print(n->_left);
-                std::cout << n->_value.first << " " << n->_value.second << std::endl;
-                print(n->_right);
+            void print() {
+                // if (n == _nil)
+                //     return ;
+                // print(n->_left);
+                std::cout << _nil;
+                // std::cout << n->_value.first << " " << n->_value.second << std::endl;
+                // print(n->_right);
             }
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
