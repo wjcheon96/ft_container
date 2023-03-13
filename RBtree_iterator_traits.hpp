@@ -23,11 +23,11 @@ namespace ft {
 
 			RBtree_iterator() : _node(NULL), _nil(NULL) {}
 			RBtree_iterator(const RBtree_iterator &other) : _node(other._node), _nil(other._nil) {}
-			RBtree_iterator(NodePtr node) : _node(node), _nil(NULL) {}
+			RBtree_iterator(NodePtr node, NodePtr nil) : _node(node), _nil(nil) {}
 			~RBtree_iterator() {}
 			RBtree_iterator &operator=(const RBtree_iterator &obj) {
 				_node = obj._node;
-				_node = obj._nil;
+				_nil = obj._nil;
 				return *this;
 			}
 			NodePtr	 base() const { return (_node); }
@@ -106,7 +106,7 @@ namespace ft {
 			RBtree_const_iterator() : _node(NULL), _nil(NULL) {}
 			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node), _nil(other._nil) {}
 			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()) {}
-			RBtree_const_iterator(NodePtr node) : _node(node), _nil(NULL) {}
+			RBtree_const_iterator(NodePtr node, NodePtr nil) : _node(node), _nil(nil) {}
 			virtual ~RBtree_const_iterator() {}
 			RBtree_const_iterator &operator=(const RBtree_const_iterator &obj) {
 				_node = obj._node;

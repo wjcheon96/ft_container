@@ -47,7 +47,7 @@ namespace ft {
                 _root = _nil;
 				_nil->_color = BLACK;
             }
-            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _size(0) {
+            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _nil(NULL), _size(0) {
                 _nil = _node_alloc.allocate(1);
 				_node_alloc.construct(_nil, node_type());
                 _root = _nil;
@@ -70,14 +70,14 @@ namespace ft {
             virtual ~RBtree() {
 				clear();
 			}
-			iterator				begin() { return iterator(rbtree_min(_root)); }
-			const_iterator			begin() const { return const_iterator(rbtree_min(_root)); }
-			iterator				end() { return iterator(_nil); }
-			const_iterator			end() const { return const_iterator(_nil); }
-			reverse_iterator		rbegin() { return reverse_iterator(end()); }
-			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
-			reverse_iterator		rend() { return reverse_iterator(begin()); }
-			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
+			iterator				begin() { return iterator(rbtree_min(_root), _nil); }
+			const_iterator			begin() const { return const_iterator(rbtree_min(_root), _nil); }
+			iterator				end() { return iterator(_nil, _nil); }
+			const_iterator			end() const { return const_iterator(_nil, _nil); }
+			reverse_iterator		rbegin() { return reverse_iterator(end(), _nil); }
+			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end(), _nil); }
+			reverse_iterator		rend() { return reverse_iterator(begin(), _nil); }
+			const_reverse_iterator	rend() const { return const_reverse_iterator(begin(), _nil); }
         private:
             void copy(NodePtr node){
 				if (node == _nil)
@@ -146,7 +146,7 @@ namespace ft {
 			size_type max_size() const {
 				return (_node_alloc.max_size());
 			}
-//---------------------------------insert--------------------------------------
+//---------------------------------insert-----------------------------------
             pair<iterator, bool> insert_value(const value_type& val) {
                 NodePtr node = _node_alloc.allocate(1);
 				_node_alloc.construct(node, node_type(val));
@@ -164,7 +164,7 @@ namespace ft {
                     else {
                         _node_alloc.destroy(node);
     					_node_alloc.deallocate(node, 1);
-                        return (ft::make_pair(iterator(x), false));
+                        return (ft::make_pair(iterator(x, _nil), false));
                     }
                 }
                 _size++;
@@ -181,7 +181,7 @@ namespace ft {
                 node->_right = _nil;
                 node->_color = RED;
                 bool ret = insert_fixup(node);
-                return (ft::make_pair(iterator(node), ret));
+                return (ft::make_pair(iterator(node, _nil), ret));
             }
 
             bool    insert_fixup(NodePtr z) {
@@ -279,9 +279,9 @@ namespace ft {
                     }
                 }
                 if (node->_value == val && node != _nil) {
-                    return (iterator(node));
+                    return (iterator(node, _nil));
                 }
-                return (iterator(_root));
+                return (iterator(_root, _nil));
             }
             NodePtr rbtree_min(NodePtr node) const {
                 if (node == NULL) {
