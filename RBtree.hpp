@@ -42,17 +42,17 @@ namespace ft {
         public:
             RBtree(value_compare const& comp, allocator_type const& alloc, node_alloc_type const& node_alloc = node_alloc_type())
             : _comp(comp), _alloc(alloc), _node_alloc(node_alloc), _root(NULL), _nil(NULL), _size(0) {
-                _nil = _node_alloc.allocate(1);
+                _nil = _node_alloc.allocate(sizeof(_nil));
                 _node_alloc.construct(_nil, node_type());
                 _root = _nil;
 				_nil->_color = BLACK;
             }
-            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _nil(NULL), _size(0) {
-                _nil = _node_alloc.allocate(1);
-				_node_alloc.construct(_nil, node_type());
-                _root = _nil;
-				_nil->_color = BLACK;
-			}
+            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(x._root), _nil(x._nil), _size(x._size) {
+                if (x._root != x._nil) {
+                    copy(x._root);
+                }
+                _size = x._size;
+            }
             RBtree& operator=(const RBtree& x) {
 				if (this == &x) {
 					return *this;
@@ -61,7 +61,9 @@ namespace ft {
 				_comp = x._comp;
 				_alloc = x._alloc;
 				_node_alloc = x._node_alloc;
-				if(x._root != NULL){
+                _root = x._root;
+                _nil = x._nil;
+				if(x._root != x._nil){
 					copy(x._root);
 				}
 				_size = x._size;
@@ -81,7 +83,7 @@ namespace ft {
         private:
             void copy(NodePtr node){
 				if (node == _nil)
-					return;
+					return ;
 				insert_value(node->_value);
 				copy(node->_left);
 				copy(node->_right);
@@ -131,7 +133,7 @@ namespace ft {
                     delete_tree(node->_left);
                     delete_tree(node->_right);
                     _node_alloc.destroy(node);
-				    _node_alloc.deallocate(node, 1);
+				    _node_alloc.deallocate(node, sizeof(node));
                 }
             }
         public:
@@ -148,7 +150,7 @@ namespace ft {
 			}
 //---------------------------------insert-----------------------------------
             pair<iterator, bool> insert_value(const value_type& val) {
-                NodePtr node = _node_alloc.allocate(1);
+                NodePtr node = _node_alloc.allocate(sizeof(_nil));
 				_node_alloc.construct(node, node_type(val));
 
                 NodePtr y = _nil;
@@ -163,7 +165,7 @@ namespace ft {
                     }
                     else {
                         _node_alloc.destroy(node);
-    					_node_alloc.deallocate(node, 1);
+    					_node_alloc.deallocate(node, sizeof(node));
                         return (ft::make_pair(iterator(x, _nil), false));
                     }
                 }
@@ -285,7 +287,7 @@ namespace ft {
                 return (iterator(_root, _nil));
             }
             NodePtr rbtree_min(NodePtr node) const {
-                if (node == NULL) {
+                if (node == _nil) {
                     return node;
                 }
                 while (node->_left != _nil) {
@@ -294,7 +296,7 @@ namespace ft {
                 return node;
             }
             NodePtr rbtree_max(NodePtr node) const {
-                if (node == NULL) {
+                if (node == _nil) {
                     return node;
                 }
                 while (node -> _right != _nil) {
@@ -367,7 +369,7 @@ namespace ft {
                     delete_fixup(x);
                 }
                 _node_alloc.destroy(x);
-                _node_alloc.deallocate(x, 1);
+                _node_alloc.deallocate(x, sizeof(x));
                 return (1);
             }
             void    delete_fixup(NodePtr x) {

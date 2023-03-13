@@ -19,6 +19,6 @@ int main(void)
 	iterOper();
 	reverseIter();
 
-//	system("leaks test");
+	system("leaks test");
 	return (0);
 }
