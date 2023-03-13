@@ -6,14 +6,14 @@
 #    By: sehan <sehan@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/18 02:34:15 by sehan             #+#    #+#              #
-#    Updated: 2023/03/12 21:25:12 by wocheon          ###   ########.fr        #
+#    Updated: 2022/02/09 17:24:44 by sehan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = test
 
 CC = clang++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address -g3
 RM = rm -rf
 
 VECTOR_FILES = print \

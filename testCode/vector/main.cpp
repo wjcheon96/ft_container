@@ -11,7 +11,7 @@ int main(void)
 	assign();
 	push_back();
 	pop_back();
-  insert();
+	insert();
 	erase();
 	swap();
 	clear();
@@ -19,5 +19,6 @@ int main(void)
 	iterOper();
 	reverseIter();
 
+//	system("leaks test");
 	return (0);
 }

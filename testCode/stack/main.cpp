@@ -6,5 +6,6 @@ int main(void)
 	construct();
 	oper();
 
+	system("leaks test");
 	return (0);
 }
