@@ -22,7 +22,7 @@ namespace ft {
 			typedef	T&								reference;
 			typedef	std::ptrdiff_t					difference_type;
 
-			RBtree_iterator() : _node(NULL), _nil(NULL) {}
+			RBtree_iterator() : _node(NULL) {}
 			RBtree_iterator(const RBtree_iterator &other) : _node(other._node), _nil(other._nil) {}
 			RBtree_iterator(NodePtr node, NodePtr nil) : _node(node), _nil(nil) {}
 			~RBtree_iterator() {}
@@ -40,9 +40,9 @@ namespace ft {
 					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->_parent != _nil && _node != _node->_parent->_left)
+				while (_node->_parent != NULL && _node != _node->_parent->_left)
 					_node = _node->_parent;
-				if (_node->_parent != _nil)
+				if (_node->_parent != NULL)
 					_node = _node->_parent;
 				return (*this);
 			}
@@ -57,9 +57,9 @@ namespace ft {
 					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->_parent != _nil && _node != _node->_parent->_right)
+				while (_node->_parent != NULL && _node != _node->_parent->_right)
 					_node = _node->_parent;
-				if (_node->_parent != _nil)
+				if (_node->_parent != NULL)
 					_node = _node->_parent;
 				else 
 					_node = _nil;
@@ -107,9 +107,10 @@ namespace ft {
 			typedef	const T&						reference;
 			typedef	std::ptrdiff_t					difference_type;
 
-			RBtree_const_iterator() : _node(NULL), _nil(NULL) {}
+			RBtree_const_iterator() : _node(NULL) {}
 			RBtree_const_iterator(const RBtree_const_iterator &other) : _node(other._node), _nil(other._nil) {}
 			RBtree_const_iterator(const RBtree_iterator<T> &other) : _node(other.base()), _nil(other.get_nil()) {}
+			RBtree_const_iterator(NodePtr node) : _node(node) {}
 			RBtree_const_iterator(NodePtr node, NodePtr nil) : _node(node), _nil(nil) {}
 			virtual ~RBtree_const_iterator() {}
 			RBtree_const_iterator &operator=(const RBtree_const_iterator &obj) {
@@ -124,9 +125,9 @@ namespace ft {
 					_node = min_value_node(_node->_right);
 					return (*this);
 				}
-				while (_node->_parent != _nil && _node != _node->_parent->_left)
+				while (_node->_parent != NULL && _node != _node->_parent->_left)
 					_node = _node->_parent;
-				if (_node->_parent != _nil)
+				if (_node->_parent != NULL)
 					_node = _node->_parent;
 				return (*this);
 			}
@@ -141,9 +142,9 @@ namespace ft {
 					_node = max_value_node(_node->_left);
 					return (*this);
 				}
-				while (_node->_parent != _nil && _node != _node->_parent->_right)
+				while (_node->_parent != NULL && _node != _node->_parent->_right)
 					_node = _node->_parent;
-				if (_node->_parent != _nil)
+				if (_node->_parent != NULL)
 					_node = _node->_parent;
 				else 
 					_node = _nil;

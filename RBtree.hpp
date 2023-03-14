@@ -259,26 +259,26 @@ namespace ft {
             NodePtr find_node(const value_type& val) {
                 NodePtr node = _root;
                 while (node != _nil && node->_value != val) {
-                    if (_comp(node->_value, val)) {
-                        node = node->_right; 
+                    if (_comp(val, node->_value)) {
+                        node = node->_left;
                     }
                     else if (_comp(node->_value, val)) {
-                        node = node->_left;
+                        node = node->_right; 
                     }
                 }
                 if (node->_value == val && node != _nil) {
                     return (node);
                 }
-                return (NULL);
+                return (_nil);
             }
             iterator find(const value_type& val) const {
                 NodePtr node = _root;
                 while (node != _nil && node->_value != val) {
-                    if (_comp(node->_value, val)) {
-                        node = node->_right; 
+                    if (_comp(val, node->_value)) {
+                        node = node->_left;
                     }
                     else if (_comp(node->_value, val)) {
-                        node = node->_left;
+                        node = node->_right; 
                     }
                 }
                 if (node->_value == val && node != _nil) {
@@ -299,7 +299,7 @@ namespace ft {
                 if (node == _nil) {
                     return node;
                 }
-                while (node -> _right != _nil) {
+                while (node->_right != _nil) {
                     node = node->_right;
                 }
                 return node;
@@ -333,7 +333,7 @@ namespace ft {
             }
             size_t delete_value(const value_type& val) {
                 NodePtr z = find_node(val);
-                if (z == NULL)
+                if (z == _nil)
                     return (0);
                 NodePtr y = z;
                 NodePtr x;                
