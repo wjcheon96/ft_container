@@ -42,14 +42,18 @@ namespace ft {
         public:
             RBtree(value_compare const& comp, allocator_type const& alloc, node_alloc_type const& node_alloc = node_alloc_type())
             : _comp(comp), _alloc(alloc), _node_alloc(node_alloc), _root(NULL), _nil(NULL), _size(0) {
-                _nil = _node_alloc.allocate(sizeof(_nil));
+                _nil = _node_alloc.allocate(1);
                 _node_alloc.construct(_nil, node_type());
                 _root = _nil;
 				_nil->_color = BLACK;
             }
-            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(x._root), _nil(x._nil), _size(x._size) {
+            RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _nil(NULL), _size(x._size) {
+                _nil = _node_alloc.allocate(1);
+                _node_alloc.construct(_nil, node_type());
+                _root = _nil;
+                _nil->_color = BLACK;
                 if (x._root != x._nil) {
-                    copy(x._root);
+                    copy(x._root, x._nil);
                 }
                 _size = x._size;
             }
@@ -61,10 +65,12 @@ namespace ft {
 				_comp = x._comp;
 				_alloc = x._alloc;
 				_node_alloc = x._node_alloc;
-                _root = x._root;
-                _nil = x._nil;
-				if(x._root != x._nil){
-					copy(x._root);
+                _nil = _node_alloc.allocate(1);
+                _node_alloc.construct(_nil, node_type());
+                _root = _nil;
+                _nil->_color = BLACK;
+				if(x._root != x._nil) {
+					copy(x._root, x._nil);
 				}
 				_size = x._size;
 				return *this;
@@ -81,12 +87,12 @@ namespace ft {
 			reverse_iterator		rend() { return reverse_iterator(begin(), _nil); }
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin(), _nil); }
         private:
-            void copy(NodePtr node){
-				if (node == _nil)
+            void copy(NodePtr node, NodePtr nil) {
+				if (node == nil)
 					return ;
 				insert_value(node->_value);
-				copy(node->_left);
-				copy(node->_right);
+				copy(node->_left, nil);
+				copy(node->_right, nil);
 			}
             void    right_rotate(NodePtr node) {
                 NodePtr left_child = node->_left;
@@ -133,7 +139,7 @@ namespace ft {
                     delete_tree(node->_left);
                     delete_tree(node->_right);
                     _node_alloc.destroy(node);
-				    _node_alloc.deallocate(node, sizeof(node));
+				    _node_alloc.deallocate(node, 1);
                 }
             }
         public:
@@ -150,7 +156,7 @@ namespace ft {
 			}
 //---------------------------------insert-----------------------------------
             pair<iterator, bool> insert_value(const value_type& val) {
-                NodePtr node = _node_alloc.allocate(sizeof(_nil));
+                NodePtr node = _node_alloc.allocate(1);
 				_node_alloc.construct(node, node_type(val));
 
                 NodePtr y = _nil;
@@ -165,7 +171,7 @@ namespace ft {
                     }
                     else {
                         _node_alloc.destroy(node);
-    					_node_alloc.deallocate(node, sizeof(node));
+    					_node_alloc.deallocate(node, 1);
                         return (ft::make_pair(iterator(x, _nil), false));
                     }
                 }
@@ -306,7 +312,8 @@ namespace ft {
             }
             void clear() {
                 delete_tree(_root);
-                _root = NULL;
+                _node_alloc.destroy(_nil);
+    			_node_alloc.deallocate(_nil, 1);
                 _size = 0;
             }
 
@@ -369,7 +376,7 @@ namespace ft {
                     delete_fixup(x);
                 }
                 _node_alloc.destroy(x);
-                _node_alloc.deallocate(x, sizeof(x));
+                _node_alloc.deallocate(x, 1);
                 return (1);
             }
             void    delete_fixup(NodePtr x) {
