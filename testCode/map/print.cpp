@@ -48,7 +48,6 @@ void print(ft::map<int, std::string> &ft_m, std::map<int, std::string> &std_m)
 	std::cout << ANSI_COLOR_YELLOW;
 	std::cout << std::setw(5) << " | " << std::setw(10) <<
 		(ft_m.size() == std_m.size() ? ANSI_COLOR_GREEN"OK" : ANSI_COLOR_RED"KO") << ANSI_COLOR_NOMAL << std::endl;
-	std::cout << it << ite;
 	for (; it != ite; it++)
 	{
 		//-------------- key ---------
