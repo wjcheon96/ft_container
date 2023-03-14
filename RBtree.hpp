@@ -292,6 +292,11 @@ namespace ft {
                 }
                 return (iterator(_root, _nil));
             }
+            NodePtr find_successor(NodePtr z) {
+                while (z->_left != _nil);
+                z = z->_left;
+                return (z);
+            }
             NodePtr rbtree_min(NodePtr node) const {
                 if (node == _nil) {
                     return node;
@@ -312,8 +317,7 @@ namespace ft {
             }
             void clear() {
                 delete_tree(_root);
-                _node_alloc.destroy(_nil);
-    			_node_alloc.deallocate(_nil, 1);
+                _root = _nil;
                 _size = 0;
             }
 
@@ -343,8 +347,8 @@ namespace ft {
                 if (z == _nil)
                     return (0);
                 NodePtr y = z;
+                bool    y_origin_color = y->_color;
                 NodePtr x;                
-                bool    y_origin__color = y->_color;
                 
                 _size--;
                 if (z->_left == _nil) {
@@ -352,16 +356,15 @@ namespace ft {
                     transplant(z, z->_right);
                 }
                 else if (z->_right == _nil) {
-                    x= z->_left;
+                    x = z->_left;
                     transplant(z, z->_left);
                 }
                 else {
                     y = tree_minimum(z->_right);
-                    y_origin__color = y->_color;
+                    y_origin_color = y->_color;
                     x = y->_right;
-                    if (y->_parent == z) {
+                    if (y->_parent == z)
                         x->_parent = y;
-                    }
                     else {
                         transplant(y, y->_right);
                         y->_right = z->_right;
@@ -371,12 +374,13 @@ namespace ft {
                     y->_left = z->_left;
                     y->_left->_parent = y;
                     y->_color = z->_color;
+
+                    if (y_origin_color == BLACK) {
+                        delete_fixup(x);
+                    }
                 }
-                if (y_origin__color == BLACK) {
-                    delete_fixup(x);
-                }
-                _node_alloc.destroy(x);
-                _node_alloc.deallocate(x, 1);
+                _node_alloc.destroy(z);
+    		    _node_alloc.deallocate(z, 1);
                 return (1);
             }
             void    delete_fixup(NodePtr x) {
