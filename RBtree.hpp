@@ -348,7 +348,7 @@ namespace ft {
                     return (0);
                 NodePtr y = z;
                 bool    y_origin_color = y->_color;
-                NodePtr x;                
+                NodePtr x;
                 
                 _size--;
                 if (z->_left == _nil) {
@@ -360,25 +360,26 @@ namespace ft {
                     transplant(z, z->_left);
                 }
                 else {
-                    y = tree_minimum(z->_right);
+                    y = z->_right;
+                    while (y->_left != _nil) {
+                        y = y->_left;
+                    }
                     y_origin_color = y->_color;
                     x = y->_right;
-                    if (y->_parent == z)
-                        x->_parent = y;
-                    else {
+                    if (y != z->_right) {
                         transplant(y, y->_right);
                         y->_right = z->_right;
                         y->_right->_parent = y;
                     }
+                    else
+                        x->_parent = y;
                     transplant(z, y);
                     y->_left = z->_left;
                     y->_left->_parent = y;
                     y->_color = z->_color;
-
-                    if (y_origin_color == BLACK) {
-                        delete_fixup(x);
-                    }
                 }
+                if (y_origin_color == BLACK)
+                    delete_fixup(x);
                 _node_alloc.destroy(z);
     		    _node_alloc.deallocate(z, 1);
                 return (1);
