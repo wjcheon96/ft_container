@@ -43,5 +43,4 @@ void construct()
 
 	printCount(2);
 	print(ft_m2, std_m2);
-
 }

@@ -32,7 +32,6 @@ void print(ft::map<int, std::string> &ft_m, std::map<int, std::string> &std_m)
 {
 	ft::map<int, std::string>::const_iterator it = ft_m.begin();
 	ft::map<int, std::string>::const_iterator ite = ft_m.end();
-	// std::map<int, std::string>::const_iterator std_ite = std_m.end();
 	std::map<int, std::string>::const_iterator std_it = std_m.begin();
 
 	std::cout << ANSI_COLOR_YELLOW;
@@ -48,6 +47,7 @@ void print(ft::map<int, std::string> &ft_m, std::map<int, std::string> &std_m)
 	std::cout << ANSI_COLOR_YELLOW;
 	std::cout << std::setw(5) << " | " << std::setw(10) <<
 		(ft_m.size() == std_m.size() ? ANSI_COLOR_GREEN"OK" : ANSI_COLOR_RED"KO") << ANSI_COLOR_NOMAL << std::endl;
+
 	for (; it != ite; it++)
 	{
 		//-------------- key ---------
@@ -71,6 +71,7 @@ void print(ft::map<int, std::string> &ft_m, std::map<int, std::string> &std_m)
 		std::cout << ANSI_COLOR_NOMAL;
 		std::cout << std::setw(10) << (it->second == std_it->second ? ANSI_COLOR_GREEN"OK" : ANSI_COLOR_RED"KO") << ANSI_COLOR_NOMAL << std::endl;
 		std_it++;
+
 	}
 }
 

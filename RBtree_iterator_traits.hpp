@@ -47,7 +47,6 @@ namespace ft {
 					}
 					_node = tmp;
 				}
-				
 				// if (_node->_right != _nil) {
 				// 	_node = min_value_node(_node->_right);
 				// 	return (*this);
@@ -70,7 +69,7 @@ namespace ft {
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (tmp != NULL && _node != tmp->_left) {
+					while (tmp != NULL && _node == tmp->_left) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}
@@ -177,7 +176,7 @@ namespace ft {
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (tmp != NULL && _node != tmp->_left) {
+					while (tmp != NULL && _node == tmp->_left) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}

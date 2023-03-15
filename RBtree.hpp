@@ -269,13 +269,15 @@ namespace ft {
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
                 NodePtr node = _root;
+                if (node == _nil)
+                    return (_nil);
                 while (node != _nil) {
-                    if (node->_value == val)
+                    if (!_comp(val, node->_value) && !_comp(node->_value, val))
                         return (node);
-                    if (_comp(val, node->_value)) {
+                    else if (_comp(val, node->_value)) {
                         node = node->_left;
                     }
-                    else if (_comp(node->_value, val)) {
+                    else {
                         node = node->_right; 
                     }
                 }
@@ -283,13 +285,15 @@ namespace ft {
             }
             iterator find(const value_type& val) const {
                 NodePtr node = _root;
+                if (node == _nil)
+                    return (iterator(_nil, _nil));
                 while (node != _nil) {
-                    if (node->_value == val)
+                    if (!_comp(val, node->_value) && !_comp(node->_value, val))
                         return (iterator(node, _nil));
-                    if (_comp(val, node->_value)) {
+                    else if (_comp(val, node->_value)) {
                         node = node->_left;
                     }
-                    else if (_comp(node->_value, val)) {
+                    else {
                         node = node->_right; 
                     }
                 }
@@ -440,16 +444,10 @@ namespace ft {
                 x->_color = BLACK;
             }
             void erase(const_iterator position){
-                NodePtr node = find_node(*position);
-                if (node != _nil)
-                    return ;
 				delete_value(*position);
 			}
 
 			size_type erase(const value_type& val){
-                NodePtr node = find_node(val);
-                if (node != _nil)
-                    return (0);
 				return delete_value(val);
 			}
 
