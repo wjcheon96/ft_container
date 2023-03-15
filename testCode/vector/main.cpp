@@ -11,7 +11,7 @@ int main(void)
 	assign();
 	push_back();
 	pop_back();
-  insert();
+  	insert();
 	erase();
 	swap();
 	clear();

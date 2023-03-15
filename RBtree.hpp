@@ -28,10 +28,10 @@ namespace ft {
 			typedef typename allocator_type::const_pointer				const_pointer;
 			typedef typename allocator_type::reference					reference;
 			typedef typename allocator_type::const_reference			const_reference;
-			typedef ft::RBtree_iterator<value_type>						iterator;
-			typedef ft::RBtree_const_iterator<value_type>				const_iterator;
-			typedef ft::reverse_iterator<iterator>						reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+			typedef typename ft::RBtree_iterator<value_type>						iterator;
+			typedef typename ft::RBtree_const_iterator<value_type>				const_iterator;
+			typedef typename ft::reverse_iterator<iterator>						reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>				const_reverse_iterator;
         private:
 			value_compare	_comp;
 			allocator_type	_alloc;
@@ -457,6 +457,7 @@ namespace ft {
 				}
 				return count;
 			}
+
             void swap(RBtree& obj) {
 				if (this == &obj) {
 					return;

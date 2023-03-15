@@ -23,8 +23,8 @@ namespace ft {
 
             typedef typename ft::RBtree_iterator<value_type>            iterator;
             typedef typename ft::RBtree_const_iterator<value_type>      const_iterator;
-            typedef ft::reverse_iterator<iterator>                      reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
+            typedef typename ft::reverse_iterator<iterator>                      reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>                const_reverse_iterator;
 
             class value_compare : public std::binary_function<value_type, value_type, bool> {
                 friend class map;
@@ -123,47 +123,47 @@ namespace ft {
             }
         
             iterator lower_bound(const key_type& key) {
-                    iterator it1 = this->begin();
-                    iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(it1->first, key) == false)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+                iterator it1 = this->begin();
+                iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(it1->first, key) == false)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
 
             const_iterator lower_bound(const key_type& key) const {
-                    const_iterator it1 = this->begin();
-                    const_iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(it1->first, key) == false)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+                const_iterator it1 = this->begin();
+                const_iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(it1->first, key) == false)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
 
             iterator upper_bound(const key_type& key) {
-                    iterator it1 = this->begin();
-                    iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(key, it1->first) == true)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+                iterator it1 = this->begin();
+                iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(key, it1->first) == true)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
         
             const_iterator upper_bound(const key_type& key) const {
-                    const_iterator it1 = this->begin();
-                    const_iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(key, it1->first) == true)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+                const_iterator it1 = this->begin();
+                const_iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(key, it1->first) == true)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
 
             pair<const_iterator, const_iterator> equal_range(const key_type& k) const{

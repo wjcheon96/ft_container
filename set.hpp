@@ -22,16 +22,29 @@ namespace ft {
             typedef typename allocator_type::reference          reference;
             typedef typename allocator_type::const_reference    const_reference;
 
-            typedef typename ft::RBtree_iterator<value_type>            iterator;
-            typedef typename ft::RBtree_const_iterator<value_type>      const_iterator;
-            typedef ft::reverse_iterator<iterator>                      reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
-        
+            typedef ft::RBtree_iterator<value_type>            iterator;
+            typedef ft::RBtree_const_iterator<value_type>      const_iterator;
+            typedef ft::reverse_iterator<iterator>             reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>       const_reverse_iterator;
+            
+            class set_compare : public std::binary_function<value_type, value_type, bool> {
+                    friend class set;
+                    protected:
+                        Compare comp;
+                        set_compare(Compare const& c) : comp(c) {}
+                    public:
+                        typedef bool result_type;
+                        typedef value_type first_argument_type;
+                        typedef value_type second_argument_type;
+                        bool operator()(const value_type& x, const value_type& y) const {
+                            return comp(x, y);
+                        }
+                };
         private:
             key_compare														_comp;
             allocator_type													_alloc;
             ft::RBtree<value_type, value_compare, allocator_type>           _tree;
-        public:
+        public: 
             explicit set (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) 
             : _comp(comp), _alloc(alloc), _tree(value_compare(_comp), _alloc) {}
             template <class InputIterator>
@@ -108,30 +121,56 @@ namespace ft {
                 return _tree.count(val);
             }
         
-            iterator lower_bound(const value_type& val) const {
-                    iterator it1 = this->begin();
-                    iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(*it1, val) == false)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+            iterator lower_bound(const value_type& key) {
+                iterator it1 = this->begin();
+                iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(*it1, key) == false)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
 
-            iterator upper_bound(const value_type& val) const {
-                    iterator it1 = this->begin();
-                    iterator it2 = this->end();
-                    while (it1 != it2) {
-                        if (_comp(val, *it1) == true)
-                            break;
-                        ++it1;
-                    }
-                    return it1;
+            const_iterator lower_bound(const value_type& key) const {
+                const_iterator it1 = this->begin();
+                const_iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(*it1, key) == false)
+                        break;
+                    ++it1;
+                }
+                return it1;
+            }
+
+            iterator upper_bound(const value_type& key) {
+                iterator it1 = this->begin();
+                iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(key, *it1) == true)
+                        break;
+                    ++it1;
+                }
+                return it1;
             }
         
-            pair<iterator, iterator> equal_range(const value_type& val) const{
+            const_iterator upper_bound(const value_type& key) const {
+                const_iterator it1 = this->begin();
+                const_iterator it2 = this->end();
+                while (it1 != it2) {
+                    if (_comp(key, *it1) == true)
+                        break;
+                    ++it1;
+                }
+                return it1;
+            }
+            pair<iterator, iterator> equal_range(const value_type& val) {
                 return ft::make_pair(lower_bound(val), upper_bound(val));
+            }
+            pair<const_iterator, const_iterator> equal_range(const key_type& k) const{
+                const_iterator it1 = this->lower_bound(k);
+                const_iterator it2 = this->upper_bound(k);
+                return ft::make_pair(it1, it2);
             }
             allocator_type get_allocator() const{
                 return allocator_type();
