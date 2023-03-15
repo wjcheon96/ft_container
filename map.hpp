@@ -54,10 +54,10 @@ namespace ft {
             map (const map& x) : _comp(x._comp), _alloc(x._alloc), _tree(x._tree) {}
 		    ~map() {}
             map& operator=(const map& x) {
-			if (this == &x)
-				return *this;
-			_tree = x._tree;
-			return *this;
+                if (this == &x)
+                    return *this;
+                _tree = x._tree;
+                return *this;
 		    } 
             iterator begin() {return _tree.begin();}
             const_iterator begin() const {return _tree.begin();}
