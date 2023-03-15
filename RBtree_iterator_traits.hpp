@@ -36,20 +36,18 @@ namespace ft {
 			NodePtr  get_nil() const { return (_nil); }
 
 			RBtree_iterator& operator++() {
-				if (_node->_right != _nil) {
-					_node = _node->_right;
-					while (_node->_left != _nil)
-						_node = _node->_left;
+				if (_node->_right && _node->_right != _nil) {
+					_node = min_value_node(_node->_right);
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (_node == tmp->_right) {
+					while (tmp != NULL && _node == tmp->_right) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}
-					if (_node->_right != tmp)
-						_node = tmp;
+					_node = tmp;
 				}
+				
 				// if (_node->_right != _nil) {
 				// 	_node = min_value_node(_node->_right);
 				// 	return (*this);
@@ -67,17 +65,12 @@ namespace ft {
 			}
 
 			RBtree_iterator& operator--() {
-				if (_node->_color == RED && _node->_parent->_parent == _node)
-					_node = _node->_right;
-				else if (_node->_left != _nil) {
-					NodePtr tmp = _node->_left;
-					while (tmp->_right != _nil)
-						tmp = tmp->_right;
-					_node = tmp;
+				if (_node->_left && _node->_left != _nil) {
+					_node = max_value_node(_node->_left);
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (_node == tmp->_left) {
+					while (tmp != NULL && _node != tmp->_left) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}
@@ -151,19 +144,16 @@ namespace ft {
 			NodePtr	 base() const { return (_node); }
 
 			RBtree_const_iterator& operator++() {
-				if (_node->_right != _nil) {
-					_node = _node->_right;
-					while (_node->_left != _nil)
-						_node = _node->_left;
+				if (_node->_right && _node->_right != _nil) {
+					_node = min_value_node(_node->_right);
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (_node == tmp->_right) {
+					while (tmp != NULL && _node == tmp->_right) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}
-					if (_node->_right != tmp)
-						_node = tmp;
+					_node = tmp;
 				}
 				// if (_node->_right != _nil) {
 				// 	_node = min_value_node(_node->_right);
@@ -182,23 +172,17 @@ namespace ft {
 			}
 
 			RBtree_const_iterator& operator--() {
-				if (_node->_color == RED && _node->_parent->_parent == _node)
-					_node = _node->_right;
-				else if (_node->_left != _nil) {
-					NodePtr tmp = _node->_left;
-					while (tmp->_right != _nil)
-						tmp = tmp->_right;
-					_node = tmp;
+				if (_node->_left && _node->_left != _nil) {
+					_node = max_value_node(_node->_left);
 				}
 				else {
 					NodePtr tmp = _node->_parent;
-					while (_node == tmp->_left) {
+					while (tmp != NULL && _node != tmp->_left) {
 						_node = tmp;
 						tmp = tmp->_parent;
 					}
 					_node = tmp;
 				}
-
 				// if (_node->_left != _nil) {
 				// 	_node = max_value_node(_node->_left);
 				// 	return (*this);

@@ -12,7 +12,7 @@
 #include "utils.hpp"
 
 namespace ft {
-    template<typename T, typename Compare = ft::less<T>, typename Alloc = std::allocator<T> > 
+    template<typename T, typename Compare = std::less<T>, typename Alloc = std::allocator<T> > 
     class RBtree {
         private:
 			typedef ft::RBtree_node<T>									node_type;
@@ -77,6 +77,8 @@ namespace ft {
 			}
             virtual ~RBtree() {
 				clear();
+                _node_alloc.destroy(_nil);
+                _node_alloc.deallocate(_nil, 1);
 			}
 			iterator				begin() { return iterator(rbtree_min(_root), _nil); }
 			const_iterator			begin() const { return const_iterator(rbtree_min(_root), _nil); }
@@ -156,6 +158,9 @@ namespace ft {
 			}
 //---------------------------------insert-----------------------------------
             pair<iterator, bool> insert_value(const value_type& val) {
+                NodePtr tmp = find_node(val);
+                if (tmp != _nil) 
+                    return (ft::make_pair(iterator(tmp, _nil), false));
                 NodePtr node = _node_alloc.allocate(1);
 				_node_alloc.construct(node, node_type(val));
 
@@ -166,13 +171,8 @@ namespace ft {
                     if (_comp(node->_value, x->_value)) {
                         x = x->_left;
                     }
-                    else if (_comp(x->_value, node->_value)) {
-                        x = x->_right;
-                    }
                     else {
-                        _node_alloc.destroy(node);
-    					_node_alloc.deallocate(node, 1);
-                        return (ft::make_pair(iterator(x, _nil), false));
+                        x = x->_right;
                     }
                 }
                 _size++;
@@ -236,21 +236,27 @@ namespace ft {
             }
 
             pair<iterator, bool> insert (const value_type &val) {
+                // NodePtr node = find_node(val);
+                // if (node != _nil)
+                //     return (ft::make_pair(iterator(node, _nil), false));
                 return (insert_value(val));
             }
 
             iterator insert(iterator pos, const value_type& val) {
-				(void)pos;
+                (void) pos;
+                // NodePtr node = find_node(val);
+                // if (node != _nil)
+                //     return (iterator(node, _nil));
 				return (insert_value(val).first);
 			}
-            
+ 
 			template <typename InputIterator>
 			void insert(InputIterator first, InputIterator last,
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
 				for (; first != last; ++first) {
 					insert(*first);
 				}
-                print(_root);
+                // print(_root);
             }
 
             void print(NodePtr n) {
@@ -263,22 +269,23 @@ namespace ft {
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
                 NodePtr node = _root;
-                while (node != _nil && node->_value != val) {
+                while (node != _nil) {
+                    if (node->_value == val)
+                        return (node);
                     if (_comp(val, node->_value)) {
                         node = node->_left;
                     }
                     else if (_comp(node->_value, val)) {
                         node = node->_right; 
                     }
-                }
-                if (node->_value == val && node != _nil) {
-                    return (node);
                 }
                 return (_nil);
             }
             iterator find(const value_type& val) const {
                 NodePtr node = _root;
-                while (node != _nil && node->_value != val) {
+                while (node != _nil) {
+                    if (node->_value == val)
+                        return (iterator(node, _nil));
                     if (_comp(val, node->_value)) {
                         node = node->_left;
                     }
@@ -286,10 +293,7 @@ namespace ft {
                         node = node->_right; 
                     }
                 }
-                if (node->_value == val && node != _nil) {
-                    return (iterator(node, _nil));
-                }
-                return (iterator(_root, _nil));
+                return (iterator(_nil, _nil));
             }
             NodePtr rbtree_min(NodePtr node) const {
                 if (node == _nil) {
@@ -436,10 +440,16 @@ namespace ft {
                 x->_color = BLACK;
             }
             void erase(const_iterator position){
+                NodePtr node = find_node(*position);
+                if (node != _nil)
+                    return ;
 				delete_value(*position);
 			}
 
 			size_type erase(const value_type& val){
+                NodePtr node = find_node(val);
+                if (node != _nil)
+                    return (0);
 				return delete_value(val);
 			}
 
