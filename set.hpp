@@ -71,7 +71,8 @@ namespace ft {
                 return _tree.insert(val);
             }
             iterator insert(iterator position, const value_type& val){
-                return _tree.insert(position, val);
+                (void) position;
+                return _tree.insert(val).first;
             }
             template<typename InputIterator>
             void insert(InputIterator first, InputIterator last){
@@ -82,7 +83,7 @@ namespace ft {
                 _tree.erase(position);
             }
             size_type erase(const value_type& val){
-                return _tree.erase(ft::make_pair(val, value_type()));
+                return _tree.erase(val);
             }
             void erase(iterator first, iterator last){
                 _tree.erase(first, last);
@@ -101,68 +102,36 @@ namespace ft {
             }
 
             iterator find(const value_type& val) const {
-                return _tree.find(ft::make_pair(val, value_type()));
+                return _tree.find(val);
             }
-            // const_iterator find(const value_type& val) const{
-            //     return _tree.find(ft::make_pair(val, value_type()));
-            // }
             size_type count(const value_type& val) const {
-                return _tree.count(ft::make_pair(val, value_type()));
+                return _tree.count(val);
             }
         
             iterator lower_bound(const value_type& val) const {
                     iterator it1 = this->begin();
                     iterator it2 = this->end();
                     while (it1 != it2) {
-                        if (_comp(it1->first, val) == false)
+                        if (_comp(*it1, val) == false)
                             break;
                         ++it1;
                     }
                     return it1;
             }
 
-            // const_iterator lower_bound(const value_type& val) const {
-            //         const_iterator it1 = this->begin();
-            //         const_iterator it2 = this->end();
-            //         while (it1 != it2) {
-            //             if (_comp(it1->first, val) == false)
-            //                 break;
-            //             ++it1;
-            //         }
-            //         return it1;
-            // }
-
             iterator upper_bound(const value_type& val) const {
                     iterator it1 = this->begin();
                     iterator it2 = this->end();
                     while (it1 != it2) {
-                        if (_comp(val, it1->first) == true)
+                        if (_comp(val, *it1) == true)
                             break;
                         ++it1;
                     }
                     return it1;
             }
         
-            // const_iterator upper_bound(const value_type& val) const {
-            //         const_iterator it1 = this->begin();
-            //         const_iterator it2 = this->end();
-            //         while (it1 != it2) {
-            //             if (_comp(val, it1->first) == true)
-            //                 break;
-            //             ++it1;
-            //         }
-            //         return it1;
-            // }
-
-            pair<const_iterator, const_iterator> equal_range(const key_type& k) const{
-                const_iterator it1 = this->lower_bound(k);
-                const_iterator it2 = this->upper_bound(k);
-                return ft::make_pair(it1, it2);
-            }
-            pair<iterator, iterator> equal_range(const key_type& k){
-                iterator it1 = this->lower_bound(k);
-                iterator it2 = this->upper_bound(k);
-                return ft::make_pair(it1, it2);
+            pair<iterator, iterator> equal_range(const value_type& val) const{
+                return ft::make_pair(lower_bound(val), upper_bound(val));
             }
             allocator_type get_allocator() const{
                 return allocator_type();
