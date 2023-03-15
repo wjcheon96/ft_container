@@ -238,17 +238,11 @@ namespace ft {
             }
 
             pair<iterator, bool> insert (const value_type &val) {
-                // NodePtr node = find_node(val);
-                // if (node != _nil)
-                //     return (ft::make_pair(iterator(node, _nil), false));
                 return (insert_value(val));
             }
 
             iterator insert(iterator pos, const value_type& val) {
                 (void) pos;
-                // NodePtr node = find_node(val);
-                // if (node != _nil)
-                //     return (iterator(node, _nil));
 				return (insert_value(val).first);
 			}
  
@@ -258,15 +252,6 @@ namespace ft {
 				for (; first != last; ++first) {
 					insert(*first);
 				}
-                // print(_root);
-            }
-
-            void print(NodePtr n) {
-                if (n == _nil)
-                    return ;
-                print(n->_left);
-                std::cout << &n << " " << n->_value.first << " " << n->_value.second << std::endl;
-                print(n->_right);
             }
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
