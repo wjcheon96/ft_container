@@ -54,10 +54,10 @@ void erase()
 
 	// ----------------[2]---------------------
 	// tester 삭제
-	// printCount(2);
-	// std_m.erase(--std_m.end());
-	// ft_m.erase(--ft_m.end());
-	// print(ft_m, std_m);
+	printCount(2);
+	std_m.erase(--std_m.end());
+	ft_m.erase(--ft_m.end());
+	print(ft_m, std_m);
 
 	// ----------------[3]---------------------
 	// name 삭제

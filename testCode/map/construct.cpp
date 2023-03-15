@@ -34,8 +34,8 @@ void construct()
 	std::map<int, std::string> std_m2(std_m);
 	ft::map<int, std::string> ft_m2(ft_m);
 
-	printCount(1);
-	print(ft_m2, std_m2);
+	// printCount(1);
+	// print(ft_m2, std_m2);
 
 	// ------------------- [2] ----------------------------------
 	std_m2 = std_m;

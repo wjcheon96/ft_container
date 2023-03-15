@@ -47,14 +47,6 @@ namespace ft {
 					}
 					_node = tmp;
 				}
-				// if (_node->_right != _nil) {
-				// 	_node = min_value_node(_node->_right);
-				// 	return (*this);
-				// }
-				// while (_node->_parent != NULL && _node != _node->_parent->_left)
-				// 	_node = _node->_parent;
-				// if (_node->_parent != NULL)
-				// 	_node = _node->_parent;
 				return (*this);
 			}
 			RBtree_iterator operator++(int) {
@@ -64,6 +56,10 @@ namespace ft {
 			}
 
 			RBtree_iterator& operator--() {
+				if (_node == _nil) {
+					_node = max_value_node(_nil->_parent);
+					return *this;
+				}
 				if (_node->_left && _node->_left != _nil) {
 					_node = max_value_node(_node->_left);
 				}
@@ -75,16 +71,6 @@ namespace ft {
 					}
 					_node = tmp;
 				}
-				// if (_node->_left != _nil) {
-				// 	_node = max_value_node(_node->_left);
-				// 	return (*this);
-				// }
-				// while (_node->_parent != NULL && _node != _node->_parent->_right)
-				// 	_node = _node->_parent;
-				// if (_node->_parent != NULL)
-				// 	_node = _node->_parent;
-				// else 
-				// 	_node = _nil;
 				return (*this);
 			}
 
@@ -154,14 +140,6 @@ namespace ft {
 					}
 					_node = tmp;
 				}
-				// if (_node->_right != _nil) {
-				// 	_node = min_value_node(_node->_right);
-				// 	return (*this);
-				// }
-				// while (_node->_parent != NULL && _node != _node->_parent->_left)
-				// 	_node = _node->_parent;
-				// if (_node->_parent != NULL)
-				// 	_node = _node->_parent;
 				return (*this);
 			}
 			RBtree_const_iterator operator++(int) {
@@ -171,6 +149,10 @@ namespace ft {
 			}
 
 			RBtree_const_iterator& operator--() {
+				if (_node == _nil) {
+					_node = max_value_node(_nil->_parent);
+					return *this;
+				}
 				if (_node->_left && _node->_left != _nil) {
 					_node = max_value_node(_node->_left);
 				}
@@ -182,16 +164,6 @@ namespace ft {
 					}
 					_node = tmp;
 				}
-				// if (_node->_left != _nil) {
-				// 	_node = max_value_node(_node->_left);
-				// 	return (*this);
-				// }
-				// while (_node->_parent != NULL && _node != _node->_parent->_right)
-				// 	_node = _node->_parent;
-				// if (_node->_parent != NULL)
-				// 	_node = _node->_parent;
-				// else 
-				// 	_node = _nil;
 				return (*this);
 			}
 

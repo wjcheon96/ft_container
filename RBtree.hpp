@@ -45,12 +45,14 @@ namespace ft {
                 _nil = _node_alloc.allocate(1);
                 _node_alloc.construct(_nil, node_type());
                 _root = _nil;
+                _nil->_parent = _root;
 				_nil->_color = BLACK;
             }
             RBtree(const RBtree& x) : _comp(x._comp), _alloc(x._alloc), _node_alloc(x._node_alloc), _root(NULL), _nil(NULL), _size(x._size) {
                 _nil = _node_alloc.allocate(1);
                 _node_alloc.construct(_nil, node_type());
                 _root = _nil;
+                _nil->_parent = _root;
                 _nil->_color = BLACK;
                 if (x._root != x._nil) {
                     copy(x._root, x._nil);
@@ -62,11 +64,10 @@ namespace ft {
 					return *this;
 				}
 				clear();
+                
 				_comp = x._comp;
 				_alloc = x._alloc;
 				_node_alloc = x._node_alloc;
-                _nil = _node_alloc.allocate(1);
-                _node_alloc.construct(_nil, node_type());
                 _root = _nil;
                 _nil->_color = BLACK;
 				if(x._root != x._nil) {
@@ -189,6 +190,7 @@ namespace ft {
                 node->_right = _nil;
                 node->_color = RED;
                 bool ret = insert_fixup(node);
+                _nil->_parent = _root;
                 return (ft::make_pair(iterator(node, _nil), ret));
             }
 
@@ -384,6 +386,7 @@ namespace ft {
                     delete_fixup(x);
                 _node_alloc.destroy(z);
     		    _node_alloc.deallocate(z, 1);
+                _nil->_parent = _root;
                 return (1);
             }
             void    delete_fixup(NodePtr x) {
