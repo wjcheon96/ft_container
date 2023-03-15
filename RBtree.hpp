@@ -144,7 +144,7 @@ namespace ft {
             }
         public:
             bool empty() const {
-				return (_size == 0);
+				return (size() == 0);
 			}
 
 			size_type size() const {
@@ -247,19 +247,18 @@ namespace ft {
 			template <typename InputIterator>
 			void insert(InputIterator first, InputIterator last,
 			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
-				for (InputIterator it = first; it != last; ++it) {
-					insert(*it);
+				for (; first != last; ++first) {
+					insert(*first);
 				}
-                //print();
-			}
+                print(_root);
+            }
 
-            void print() {
-                // if (n == _nil)
-                //     return ;
-                // print(n->_left);
-                std::cout << _nil;
-                // std::cout << n->_value.first << " " << n->_value.second << std::endl;
-                // print(n->_right);
+            void print(NodePtr n) {
+                if (n == _nil)
+                    return ;
+                print(n->_left);
+                std::cout << &n << " " << n->_value.first << " " << n->_value.second << std::endl;
+                print(n->_right);
             }
 //---------------------------search------------------------------------------
             NodePtr find_node(const value_type& val) {
@@ -292,14 +291,9 @@ namespace ft {
                 }
                 return (iterator(_root, _nil));
             }
-            NodePtr find_successor(NodePtr z) {
-                while (z->_left != _nil);
-                z = z->_left;
-                return (z);
-            }
             NodePtr rbtree_min(NodePtr node) const {
                 if (node == _nil) {
-                    return node;
+                    return _nil;
                 }
                 while (node->_left != _nil) {
                     node = node->_left;
@@ -308,7 +302,7 @@ namespace ft {
             }
             NodePtr rbtree_max(NodePtr node) const {
                 if (node == _nil) {
-                    return node;
+                    return _nil;
                 }
                 while (node->_right != _nil) {
                     node = node->_right;
